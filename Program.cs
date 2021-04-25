@@ -24,7 +24,12 @@ namespace anagram.name
                 Console.WriteLine("Anagram Names for phrase: " + command);
 
                 builder.setSettingFromPhrase(command);
+                
+                DateTime marker = DateTime.Now;
                 HashSet<String> matches = builder.generateNames(command);
+                TimeSpan duration = DateTime.Now - marker;
+                
+                Console.WriteLine($"Took {duration}");
                 if (matches.Count == 0)
                 {
                     Console.WriteLine("NO MATCHES");
