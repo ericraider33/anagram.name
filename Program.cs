@@ -10,7 +10,6 @@ namespace anagram.name
             HashSet<String> firstNames = FileUtil.parseNames(@"C:\dev\anagram.name\first_names.txt");
             HashSet<String> lastNames = FileUtil.parseNames(@"C:\dev\anagram.name\last_names.txt");
             AnagramName builder = new AnagramName(firstNames, lastNames);
-            builder.lastOnly = true;
 
             do
             {
@@ -23,7 +22,8 @@ namespace anagram.name
                     break;
                 
                 Console.WriteLine("Anagram Names for phrase: " + command);
-                
+
+                builder.setSettingFromPhrase(command);
                 HashSet<String> matches = builder.generateNames(command);
                 if (matches.Count == 0)
                 {
@@ -31,8 +31,8 @@ namespace anagram.name
                 }
                 else
                 {
-                    foreach (String match in matches)
-                        Console.WriteLine(match);
+                    // foreach (String match in matches)
+                    //     Console.WriteLine(match);
                 }
             } while (true);
             
