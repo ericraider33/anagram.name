@@ -136,7 +136,7 @@ namespace anagram.name
                         !lastNames.Contains(lastName))
                         return;
                     
-                    addMatch(String.Concat(firstName, " ", lastName));
+                    addMatch(String.Concat(firstName, " ", middleName, " ", lastName));
                     return;
                 }
             }
