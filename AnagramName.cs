@@ -12,6 +12,7 @@ namespace anagram.name
         public bool lastOnly { get; set; }
         public bool allowFirstOrLastName { get; set; }
         public int maxParts { get; set; }
+        private int counter;
 
         private HashSet<String> matches;
 
@@ -31,7 +32,7 @@ namespace anagram.name
                 allowFirstOrLastName = false;
                 maxParts = 0;
             }
-            else if (phrase.Length <= 8)
+            else if (phrase.Length <= 11)
             {
                 lastOnly = false;
                 allowFirstOrLastName = true;
@@ -53,29 +54,34 @@ namespace anagram.name
             
             // Recursively generates names
             matches = new HashSet<String>();
-            generateRecursive(phrase, new StringBuilder(phrase.Length));
+            counter = 0;
+            
+            generateRecursive(new StringBuilder(phrase), 0);
 
             return matches;
         }
 
-        private void generateRecursive(String phrase, StringBuilder text)
+        private void generateRecursive(StringBuilder phrase, int index)
         {
-            if (phrase.Length == 0)
+            if (index + 1 == phrase.Length)
             {
-                processRecursive(text.ToString());
+                counter++;
+                processRecursive(phrase.ToString());
                 return;
             }
-            
-            for (int i = 0; i < phrase.Length; i++)
+
+            char original = phrase[index];
+            for (int i = index; i < phrase.Length; i++)
             {
-                char c = phrase[i];
+                char toSwap = phrase[i];
 
-                String subPhrase = phrase.removeAtIndex(i);
+                phrase[index] = toSwap;
+                phrase[i] = original;
 
-                int currentLength = text.Length;
-                text.Append(c);
-                generateRecursive(subPhrase, text);
-                text.Length = currentLength;
+                generateRecursive(phrase, index+1);
+                
+                phrase[i] = toSwap;
+                phrase[index] = original;
             }
         }
 
