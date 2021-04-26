@@ -7,8 +7,8 @@ namespace anagram.name
     {
         static void Main(string[] args)
         {
-            HashSet<AString> firstNames = FileUtil.parseNames(@"C:\dev\anagram.name\first_names.txt");
-            HashSet<AString> lastNames = FileUtil.parseNames(@"C:\dev\anagram.name\last_names.txt");
+            HashSet<AString> firstNames = FileUtil.parseNames(@"C:\dev\anagram.name\first_names_us_baby_since_1900.txt");
+            HashSet<AString> lastNames = FileUtil.parseNames(@"C:\dev\anagram.name\last_names_us_2010_census.txt");
             AnagramName builder = new AnagramName(firstNames, lastNames);
 
             do
@@ -25,8 +25,8 @@ namespace anagram.name
 
                 builder.setSettingFromPhrase(command);
                 builder.allowFirstOrLastName = false;
-                builder.maxParts = 0;
-                builder.minNameLength = 4;
+                builder.maxParts = 1;
+                builder.minNameLength = 0;
                 
                 DateTime marker = DateTime.Now;
                 HashSet<String> matches = builder.generateNames(command);
