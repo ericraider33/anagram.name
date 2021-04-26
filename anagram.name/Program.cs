@@ -15,9 +15,17 @@ namespace anagram.name
 
             do
             {
-                Console.WriteLine();
-                Console.WriteLine("Enter phrase to covert to a name: ");
-                String command = Console.ReadLine() ?? "";
+                String command;
+                if (args.Length == 0)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("Enter phrase to covert to a name: ");
+                    command = Console.ReadLine() ?? "";                     
+                }
+                else
+                {
+                    command = args[0];
+                }
 
                 command = command.Trim();
                 if (String.IsNullOrEmpty(command))
@@ -25,11 +33,10 @@ namespace anagram.name
                 
                 Console.WriteLine("Anagram Names for phrase: " + command);
 
-                // builder.setSettingFromPhrase(command);
-                // builder.allowFirstOrLastName = false;
-                // builder.lastOnly = false;
-                // builder.maxParts = 1;
-                // builder.minNameLength = 0;
+                builder.setSettingFromPhrase(command);
+                builder.allowFirstOrLastName = false;
+                builder.maxParts = 1;
+                builder.minNameLength = 4;
                 
                 DateTime marker = DateTime.Now;
                 HashSet<String> matches = builder.generateNames(command);
@@ -55,7 +62,7 @@ namespace anagram.name
                         }
                     }
                 }
-            } while (true);
+            } while (args.Length == 0);
             
             Console.WriteLine("DONE.");
         }
