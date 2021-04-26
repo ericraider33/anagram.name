@@ -1,22 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace anagram.name
 {
     public class AnagramName
     {
-        private readonly HashSet<String> firstNames;
-        private readonly HashSet<String> lastNames;
+        private readonly HashSet<AString> firstNames;
+        private readonly HashSet<AString> lastNames;
         public bool allowFirstLetterMatch { get; set; }
         public bool lastOnly { get; set; }
         public bool allowFirstOrLastName { get; set; }
         public int maxParts { get; set; }
-        private int counter;
+        public int counter { get; private set; }
+        public int minNameLength;
 
         private HashSet<String> matches;
+        private AString firstName;
+        private AString middleName;
+        private AString lastName;
+        private AString text;
 
-        public AnagramName(HashSet<string> firstNames, HashSet<string> lastNames)
+        public AnagramName(HashSet<AString> firstNames, HashSet<AString> lastNames)
         {
             this.firstNames = firstNames;
             this.lastNames = lastNames;
@@ -54,24 +58,28 @@ namespace anagram.name
             
             // Recursively generates names
             matches = new HashSet<String>();
+            firstName = new AString(phrase);
+            middleName = new AString(phrase);
+            lastName = new AString(phrase);
+            text = new AString(phrase);
             counter = 0;
             
-            generateRecursive(new StringBuilder(phrase), 0);
+            generateRecursive(new AString(phrase), 0);
 
             return matches;
         }
 
-        private void generateRecursive(StringBuilder phrase, int index)
+        private void generateRecursive(AString phrase, int index)
         {
-            if (index + 1 == phrase.Length)
+            if (index + 1 == phrase.length)
             {
                 counter++;
-                processRecursive(phrase.ToString());
+                processRecursive(phrase);
                 return;
             }
 
             char original = phrase[index];
-            for (int i = index; i < phrase.Length; i++)
+            for (int i = index; i < phrase.length; i++)
             {
                 char toSwap = phrase[i];
 
@@ -85,60 +93,68 @@ namespace anagram.name
             }
         }
 
-        private void processRecursive(String text)
+        private void processRecursive(AString phrase)
         {
+            text.setString(phrase);
+            text.trim();
+            
             if (lastOnly)
             {
-                String subText = text.Trim();
-                if (lastNames.Contains(subText))
-                    addMatch(subText);
+                if (lastNames.Contains(text))
+                    addMatch(text.ToString());
 
                 return;
             }
 
-            String[] parts = text.Split(' ');
-            if (allowFirstOrLastName || parts.Length == 1)
-            {
-                String subText = text.Trim();
-                if (firstNames.Contains(subText) || lastNames.Contains(subText))
-                    addMatch(subText);
-            }
+            text.removeDuplicates(' ');
+            int parts = text.countCharacter(' ') + 1;
 
-            switch (parts.Length)
+            if (allowFirstOrLastName)
+            {
+                if (firstNames.Contains(text) || lastNames.Contains(text))
+                    addMatch(text.ToString());
+            }
+            
+            switch (parts)
             {
                 case 2:
                 {
-                    String firstName = parts[0];
-                    String lastName = parts[1];
+                    text.splitAt(firstName, lastName, ' ');
 
-                    if ((!allowFirstLetterMatch || firstName.Length > 1) &&
+                    if (minNameLength > 0 && (firstName.length < minNameLength || lastName.length < minNameLength))
+                        return;
+                    
+                    if ((!allowFirstLetterMatch || firstName.length > 1) &&
                         !firstNames.Contains(firstName))
                         return;
 
-                    if ((!allowFirstLetterMatch || lastName.Length > 1) &&
+                    if ((!allowFirstLetterMatch || lastName.length > 1) &&
                         !lastNames.Contains(lastName))
                         return;
                     
                     addMatch(String.Concat(firstName, " ", lastName));
                     return;
                 }
-
+                
                 case 3:
                 {
-                    String firstName = parts[0];
-                    String middleName = parts[1];
-                    String lastName = parts[2];
+                    text.splitAt(firstName, lastName, ' ');
+                    text.setString(lastName);
+                    text.splitAt(middleName, lastName, ' ');
+                    
+                    if (minNameLength > 0 && (firstName.length < minNameLength || lastName.length < minNameLength))
+                        return;
 
-                    if ((!allowFirstLetterMatch || firstName.Length > 1) &&
+                    if ((!allowFirstLetterMatch || firstName.length > 1) &&
                         !firstNames.Contains(firstName))
                         return;
                     
-                    if ((!allowFirstLetterMatch || middleName.Length > 1) &&
+                    if ((!allowFirstLetterMatch || middleName.length > 1) &&
                         !firstNames.Contains(middleName) && 
                         !lastNames.Contains(middleName))
                         return;
 
-                    if ((!allowFirstLetterMatch || lastName.Length > 1) &&
+                    if ((!allowFirstLetterMatch || lastName.length > 1) &&
                         !lastNames.Contains(lastName))
                         return;
                     

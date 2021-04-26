@@ -7,19 +7,19 @@ namespace anagram.name
 {
     public static class FileUtil
     {
-        public static HashSet<String> parseNames(String fileName)
+        public static HashSet<AString> parseNames(String fileName)
         {
-            HashSet<String> results = new HashSet<String>(StringComparer.CurrentCultureIgnoreCase);
+            HashSet<AString> results = new HashSet<AString>();
             using (StreamReader reader = new StreamReader(new FileStream(fileName, FileMode.Open)))
             {
                 String line;
                 while ((line = reader.ReadLine()) != null)
                 {
-                    line = line.Trim();
+                    line = line.ToLower().Trim();
                     if (line.StartsWith("#") || line == "")
                         continue;
 
-                    results.Add(line);
+                    results.Add(new AString(line));
                 }
             }
 
