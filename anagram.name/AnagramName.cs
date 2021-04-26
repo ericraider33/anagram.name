@@ -109,7 +109,7 @@ namespace anagram.name
             text.removeDuplicates(' ');
             int parts = text.countCharacter(' ') + 1;
 
-            if (allowFirstOrLastName)
+            if (allowFirstOrLastName || parts == 1)
             {
                 if (firstNames.Contains(text) || lastNames.Contains(text))
                     addMatch(text.ToString());
