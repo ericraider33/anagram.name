@@ -25,5 +25,24 @@ namespace anagram.name
 
             return results;
         }
+
+        public static HashSet<String> parseNamesString(String fileName)
+        {
+            HashSet<String> results = new HashSet<String>();
+            using (StreamReader reader = new StreamReader(new FileStream(fileName, FileMode.Open)))
+            {
+                String line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    line = line.ToLower().Trim();
+                    if (line.StartsWith("#") || line == "")
+                        continue;
+
+                    results.Add(line);
+                }
+            }
+
+            return results;
+        }
     }
 }

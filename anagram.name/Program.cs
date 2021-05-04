@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace anagram.name
 {
@@ -25,6 +26,7 @@ namespace anagram.name
 
                 builder.setSettingFromPhrase(command);
                 builder.allowFirstOrLastName = false;
+                builder.lastOnly = false;
                 builder.maxParts = 1;
                 builder.minNameLength = 0;
                 
@@ -39,8 +41,14 @@ namespace anagram.name
                 }
                 else
                 {
-                    // foreach (String match in matches)
-                    //     Console.WriteLine(match);
+                    using (Stream file = new FileStream(@"c:\dev\ee.txt", FileMode.Create, FileAccess.Write))
+                    {
+                        using (TextWriter output = new StreamWriter(file))
+                        {
+                            foreach (String match in matches)
+                                output.WriteLine(match);
+                        }
+                    }
                 }
             } while (true);
             
