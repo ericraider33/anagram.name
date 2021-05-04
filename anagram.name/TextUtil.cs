@@ -28,5 +28,12 @@ namespace anagram.name
 
             return (input.Substring(0, index), input.Substring(index));
         }
+
+        public static String sortCharacters(this String input)
+        {
+            char[] characters = input.ToCharArray();
+            Array.Sort(characters);
+            return new String(characters);
+        }
     }
 }
