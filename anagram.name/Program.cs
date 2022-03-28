@@ -32,11 +32,6 @@ namespace anagram.name
                     break;
                 
                 Console.WriteLine("Anagram Names for phrase: " + command);
-
-                builder.setSettingFromPhrase(command);
-                builder.allowFirstOrLastName = false;
-                builder.maxParts = 1;
-                builder.minNameLength = 4;
                 
                 DateTime marker = DateTime.Now;
                 HashSet<String> matches = builder.generateNames(command);
@@ -56,6 +51,9 @@ namespace anagram.name
                             output.WriteLine("Anagrams for phrase: " + command);
                             foreach (String match in matches)
                             {
+                                // if (!match.StartsWith("nelson"))
+                                //     continue;
+                                
                                 output.WriteLine(match);
                                 Console.WriteLine(match);                                
                             }
